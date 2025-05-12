@@ -1,14 +1,16 @@
 #!/bin/bash
 
-# changing into script folder & loading bash scripts
+# changing into script folder
 cd "$(dirname "${BASH_SOURCE[0]}")"
+# loading seperated bash scripts
 source ./checkDirs.sh
+source ./rsync.sh
 
 # declaring (-A) dict for target directory to save
 declare -A targetDirs=(
     ["/mnt/dr0/nas"]="/mnt/dr1/nasBackup"
 )
 
-# checking if wished directories can be found
-checkDirs targetDirs
-
+# checking and mirroring directories
+checkDirs targetDirs # checks if directories exists
+makeMirrorImage targetDirs # makes mirror images of targetDirs
