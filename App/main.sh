@@ -4,11 +4,11 @@
 cd "$(dirname "${BASH_SOURCE[0]}")"
 # loading seperated bash scripts
 source ./checkDirs.sh
-source ./rsync.sh
+source ./mirror.sh
 
 # declaring (-A) dict for target directory to save
 declare -A targetDirs=(
-    ["/mnt/dr0/nas"]="/mnt/dr1/nasBackup"
+    ["/mnt/dr0/nas/device/"]="/mnt/dr1/nasBackup/device"
 )
 
 # checking and mirroring directories

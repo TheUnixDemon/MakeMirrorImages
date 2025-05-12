@@ -21,3 +21,39 @@ Here a short look into the scripts and other files located in the folder `./App`
     * makes a mirror image from `targetDir` to `destinationDir` with `rsync -av ...`
     * `exclude.txt`
         * *excluding directories* for mirroring process
+
+# Deploy as a Service
+
+After testing the Bash script can be implemented with `Systemd` using a *Daemon* (Service) to do that. Also it is helpful and more efficient to use a timer implemented as a `*.timer` file. I created for that a template for the Daemon and the Timer. Both have to be the same basename (here `mirroring`). So the Timer and the Daemon only differ in the suffix and both have to be saved in `/etc/systemd/system/`.
+
+## Template
+
+* [`mirroring.service` - Daemon](./Service/mirroring.service)
+* [`mirroring.timer` - Timer](./Service/mirroring.timer)
+
+## Step by step deployment
+
+Moving the templates into the right folder for enabling the Timer.
+
+```bash
+#!/bin/bash
+sudo su
+mv Service/mirroring.* /etc/systemd/system
+systemctl daemon-reload
+systemctl enable --now mirroring.timer
+```
+
+After that check if the Daemon is set using Timer as initializer. Also check after that if the Timer is not only enabled but is set to the wished time.
+
+```bash
+#!/bin/bash
+sudo su
+systemctl status mirroring.service # should be disabled & trigger: Timer
+systemctl status mirroring.timer # should be enabled
+```
+
+Now you can make a test run through the service itself to check if it will work out as wished. You can check out the `.log` files if you want to follow up with the progress of your service.
+
+```bash
+sudo systemctl start mirroring.service
+```

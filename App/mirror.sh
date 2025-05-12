@@ -7,8 +7,9 @@ function makeMirrorImage {
     # make mirror image; targetDir -> {mirroring to} -> destinationDir
     for key in "${!mirrorDirs[@]}"; do
         targetDir="$key"
-        destinationDir="${!mirrorDirs[@]}"
-        
+        destinationDir="${mirrorDirs[$key]}"
+
         # starting mirroring process using rsync
-        rsync -av --delete --exclude-from="exclude.txt" "$targetDir" "$destinationDir" # (could use -z for compression for transfer)
+        rsync -a --progress --delete --exclude-from="exclude.txt" "$targetDir" "$destinationDir"
+    done
 }
