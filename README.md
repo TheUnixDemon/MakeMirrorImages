@@ -40,19 +40,28 @@ Moving the templates into the right folder for enabling the Timer.
 sudo su
 mv Service/mirroring.* /etc/systemd/system
 systemctl daemon-reload
-systemctl enable --now mirroring.timer
+systemctl enable --now mirroring.timer # for starting *mirroring.service* through that
 ```
 
-After that check if the Daemon is set using Timer as initializer. Also check after that if the Timer is not only enabled but is set to the wished time.
+After that check if the Daemon is set using Timer as initializer abd the Timer for the Daemon is enabled and set to the wished time. Here an example how it can look like if set up right.
 
 ```bash
 #!/bin/bash
-sudo su
-systemctl status mirroring.service # should be disabled & trigger: Timer
-systemctl status mirroring.timer # should be enabled
+$ systemctl status mirroring.service
+○ mirroring.service - creates with *rsync* mirroring backups
+     Loaded: loaded (/etc/systemd/system/mirroring.service; static)
+     Active: inactive (dead)
+TriggeredBy: ● mirroring.timer
+
+$ systemctl status mirroring.timer
+● mirroring.timer - weeky mirror backup sync
+     Loaded: loaded (/etc/systemd/system/mirroring.timer; enabled; preset: enabled)
+     Active: active (waiting) since Tue 2025-05-13 00:24:46 CEST; 6min ago
+    Trigger: Sun 2025-05-18 05:00:00 CEST; 5 days left
+   Triggers: ● mirroring.service
 ```
 
-Now you can make a test run through the service itself to check if it will work out as wished. You can check out the `.log` files if you want to follow up with the progress of your service.
+Now you can make a test run through the Daemon itself to check if it will work out as wished. You can check out the `*.log` files if you want to follow up with the progress of the Daemon.
 
 ```bash
 sudo systemctl start mirroring.service
