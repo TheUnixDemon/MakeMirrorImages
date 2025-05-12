@@ -4,5 +4,6 @@ Description=creates with *rsync* mirroring backups
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/bash /PATH/main.sh
+# optional; output log files
 StandardOutput=append:/PATH/mirroring.log
 StandardError=append:/PATH/mirroringError.log
